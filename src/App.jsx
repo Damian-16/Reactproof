@@ -2,6 +2,7 @@ import { Button, Grid } from "@mui/material";
 import "./App.css";
 import Buttons from "./components/buttons";
 import { useState } from "react";
+import { getData } from "./backendServices/backend";
 
 export const HomeView = {
   home: {
@@ -85,20 +86,23 @@ export const HomeView = {
 
 function App() {
   const [hovered, setHovered] = useState(false);
+  getData("a")
+  const [tab, setTab] = useState(false);
+  const changeTab=(e)=>setTab(e)
   return (
     <>
       <Grid style={HomeView.home}>
         <Grid style={HomeView.rectangle}>
           <span style={HomeView.title}>HELLOWORLD</span>
         </Grid>
-        <Button variant="outlined" style={HomeView.buttton}>
+        <Button variant="outlined" onClick={()=>changeTab(false)} style={HomeView.buttton}>
           <p style={HomeView.textButton}>All</p>
         </Button>
-        <Button variant="outlined" style={HomeView.buttton}>
+        <Button variant="outlined" onClick={()=>changeTab(true)} style={HomeView.buttton}>
           <p style={HomeView.textButton}>MyFaves</p>
         </Button>
-        <Grid container xs={12}>
-          <Grid xs={12} sm={6} item>
+        <Grid container flexWrap={"wrap"} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}xs={12}>
+          {!tab?(<>
             <Grid
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
@@ -108,8 +112,94 @@ function App() {
               }}
             >
               asas
+              <Button>
+
+              </Button>
             </Grid>
-          </Grid>
+             <Grid
+             onMouseEnter={() => setHovered(true)}
+             onMouseLeave={() => setHovered(false)}
+             style={{
+               ...HomeView.boxOfPosts,
+               backgroundColor: hovered ? "#f5f5f5" : "#fff",
+             }}
+           >
+             asas
+             <Button>
+
+             </Button>
+           </Grid><Grid
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              style={{
+                ...HomeView.boxOfPosts,
+                backgroundColor: hovered ? "#f5f5f5" : "#fff",
+              }}
+            >
+              asas
+              <Button>
+
+              </Button>
+            </Grid>
+             <Grid
+             onMouseEnter={() => setHovered(true)}
+             onMouseLeave={() => setHovered(false)}
+             style={{
+               ...HomeView.boxOfPosts,
+               backgroundColor: hovered ? "#f5f5f5" : "#fff",
+             }}
+           >
+             asas
+             <Button>
+
+             </Button>
+           </Grid><Grid
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              style={{
+                ...HomeView.boxOfPosts,
+                backgroundColor: hovered ? "#f5f5f5" : "#fff",
+              }}
+            >
+              asas
+              <Button>
+
+              </Button>
+            </Grid>
+             <Grid
+             onMouseEnter={() => setHovered(true)}
+             onMouseLeave={() => setHovered(false)}
+             style={{
+               ...HomeView.boxOfPosts,
+               backgroundColor: hovered ? "#f5f5f5" : "#fff",
+             }}
+           >
+             asas
+             <Button>
+
+             </Button>
+           </Grid>
+
+
+
+
+
+            </>):(
+               <Grid
+               onMouseEnter={() => setHovered(true)}
+               onMouseLeave={() => setHovered(false)}
+               style={{
+                 ...HomeView.boxOfPosts,
+                 backgroundColor: hovered ? "#f5f5f5" : "#fff",
+               }}
+             >
+               sadsvdvfbfg
+               <Button>
+ 
+               </Button>
+             </Grid>
+            )}
+         
         </Grid>
         <Grid style={HomeView.butttonContainer}>
           <Button variant="outlined" style={HomeView.butttonOfPages}>
