@@ -1,3 +1,4 @@
+import { Button } from "@mui/material"
 import { HomeView } from "../App"
 import { numberButton } from "../utils/constants"
 
@@ -12,5 +13,5 @@ const Buttons = () => {
        )
     }
   return (
-    <>{ numberButton.map((item)=> {<button style={HomeView.button}>{item}</button>})}</>)}
+    <>{ numberButton.map((item)=> {<Button style={HomeView.button}>{item}</Button>})}</>)}
 export default Buttons
