@@ -1,4 +1,15 @@
-import { Box, Button, FormControl, Grid, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import "./App.css";
 
 import { useEffect, useState } from "react";
@@ -84,73 +95,140 @@ export const HomeView = {
     backgroundColor: "#fff",
     transition: "background-color 0.3s ease",
   },
-  author:{
-    width: '6.688rem',
-    height: '0.813rem',
-    margin: '1rem 20.313rem 0.438rem 0.5rem',
-    fontFamily: 'Roboto',
-    fontSize: '0.688rem',
-    fontWeight: 'normal',
-    fontStretch: 'normal',
-    fontStyle: 'normal',
-    lineHeight: 'normal',
-    letterSpacing: 'normal',
-    color: '#767676',
-  }
+  author: {
+    width: "6.688rem",
+    height: "0.813rem",
+    margin: "1rem 20.313rem 0.438rem 0.5rem",
+    fontFamily: "Roboto",
+    fontSize: "0.688rem",
+    fontWeight: "normal",
+    fontStretch: "normal",
+    fontStyle: "normal",
+    lineHeight: "normal",
+    letterSpacing: "normal",
+    color: "#767676",
+  },
+  story_title: {
+    width: "27.5rem",
+    height: "1.25rem",
+    margin: "0.375rem 0 0",
+    fontFamily: "Roboto",
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    fontStretch: "normal",
+    fontStyle: "normal",
+    lineHeight: 1.43,
+    letterSpacing: "0.25px",
+    color: "var(--brownish-grey)",
+    marginTop: 3,
+  },
 };
 
 function App() {
-  const [posts, setPosts] = useState([])
-  
-  const [hovered, setHovered] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(null)
+  const [posts, setPosts] = useState([]);
+  const [hovered, setHovered] = useState();
+  const [currentFrame, setCurrentFrame] = useState(null);
   const [tab, setTab] = useState(false);
-  const changeTab=(e)=>setTab(e)
-  const handleChangeCurrentFrame= (event) => {
+  const changeTab = (e) => setTab(e);
+  const handleChangeCurrentFrame = (event) => {
     setCurrentFrame(event.target.value);
   };
 
+  let returnPosts = () => {
+    return posts.map((item) => (
+      <Grid
+        key={item.id}
+        onMouseEnter={() => setHovered(item.id)}
+        onMouseLeave={() => setHovered(0)}
+        style={{
+          ...HomeView.boxOfPosts,
+          backgroundColor: item.id === hovered ? "#f5f5f5" : "#fff",
+        }}
+      >
+        <Link href={item.story_url} textColor="none" underline="none">
+          <p style={HomeView.author}>por el author {`${item.author}`}</p>
+          <p style={HomeView.story_title}>{`${item.story_title}`}</p>
+        </Link>
+        <Box
+          sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end" }}
+        >
+          <IconButton
+            sx={{ display: "flex", justifyContent: "flex-end" }}
+            variant="solid"
+          >
+            <FavoriteBorder />
+          </IconButton>
+        </Box>
+      </Grid>
+    ));
+  };
+
   useEffect(() => {
-    let newPost = JSON.parse(localStorage.getItem('frames'))
-    setPosts(newPost)
-    console.log("🚀 ~ file: App.jsx:90 ~ App ~ posts:", posts)
-  }, [currentFrame])
-  
+    let newPost = JSON.parse(localStorage.getItem("frames"));
+    setPosts(newPost);
+    returnPosts();
+    console.log("🚀 ~ file: App.jsx:90 ~ App ~ posts:", posts);
+  }, [currentFrame]);
+  useEffect(() => {
+    let newPost = JSON.parse(localStorage.getItem("frames"));
+    setPosts(newPost);
+  }, [currentFrame]);
   return (
     <>
       <Grid style={HomeView.home}>
         <Grid style={HomeView.rectangle}>
           <span style={HomeView.title}>HACKER NEWS</span>
         </Grid>
-        <Button variant="outlined" onClick={()=>changeTab(false)} style={HomeView.buttton}>
+        <Button
+          variant="outlined"
+          onClick={() => changeTab(false)}
+          style={HomeView.buttton}
+        >
           <p style={HomeView.textButton}>All</p>
         </Button>
-        <Button variant="outlined" onClick={()=>changeTab(true)} style={HomeView.buttton}>
+        <Button
+          variant="outlined"
+          onClick={() => changeTab(true)}
+          style={HomeView.buttton}
+        >
           <p style={HomeView.textButton}>MyFaves</p>
         </Button>
-        <Grid mt={10} mb={5} item xs={12}
->        <TextField
-                id="selector"
-                select
-                label="select your News"
-                value={currentFrame}
-                onChange={(e) => handleChangeCurrentFrame(e)}
-                sx={{minWidth:300}}
+        <Grid mt={10} mb={5} item xs={12}>
+          {" "}
+          <TextField
+            id="selector"
+            select
+            label="select your News"
+            value={currentFrame}
+            onChange={(e) => handleChangeCurrentFrame(e)}
+            sx={{ minWidth: 300 }}
+          >
+            {frameworks.map((option) => (
+              <MenuItem
+                onClick={() => getData(option.action)}
+                key={option.id}
+                value={option.id}
               >
-        {frameworks.map((option) => (
-                  <MenuItem onClick={()=>getData(option.action)} key={option.id} value={option.id}>
-                    <InputAdornment position="start" style={{ margin: 10 }}>
-                      {" "}
-                      <img src={option.icon} width={24 }height={24}></img>
-                      {option.text}{" "}
-                    </InputAdornment>
-                  </MenuItem>
-                ))}</TextField>
-                </Grid>
-        <Grid container style={{display:"flex",flexDirection:"column",height:"70%"}} flexWrap={"wrap"} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}xs={12}>
-         
-          {!tab?(<>
-          
+                <InputAdornment position="start" style={{ margin: 10 }}>
+                  {" "}
+                  <img src={option.icon} width={24} height={24}></img>
+                  {option.text}{" "}
+                </InputAdornment>
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid
+          container
+          style={{ display: "flex", flexDirection: "column", height: "70%" }}
+          flexWrap={"wrap"}
+          rowSpacing={1}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          xs={12}
+        >
+          {!tab ? (
+            <>{returnPosts()}</>
+          ) : (
             <Grid
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
@@ -159,97 +237,10 @@ function App() {
                 backgroundColor: hovered ? "#f5f5f5" : "#fff",
               }}
             >
-             <p style={HomeView.author}>por el author {`${author}`}</p>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                  <IconButton sx={{ display: 'flex', justifyContent: 'flex-end' }}variant="solid">
-                    <FavoriteBorder />
-                  </IconButton>
-                  </Box>    
+              sadsvdvfbfg
+              <Button></Button>
             </Grid>
-             <Grid
-             onMouseEnter={() => setHovered(true)}
-             onMouseLeave={() => setHovered(false)}
-             style={{
-               ...HomeView.boxOfPosts,
-               backgroundColor: hovered ? "#f5f5f5" : "#fff",
-             }}
-           >
-             asas
-             <Button>
-
-             </Button>
-           </Grid><Grid
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-              style={{
-                ...HomeView.boxOfPosts,
-                backgroundColor: hovered ? "#f5f5f5" : "#fff",
-              }}
-            >
-              asas
-              <Button>
-
-              </Button>
-            </Grid>
-             <Grid
-             onMouseEnter={() => setHovered(true)}
-             onMouseLeave={() => setHovered(false)}
-             style={{
-               ...HomeView.boxOfPosts,
-               backgroundColor: hovered ? "#f5f5f5" : "#fff",
-             }}
-           >
-             asas
-             <Button>
-
-             </Button>
-           </Grid><Grid
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-              style={{
-                ...HomeView.boxOfPosts,
-                backgroundColor: hovered ? "#f5f5f5" : "#fff",
-              }}
-            >
-              asas
-              <Button>
-
-              </Button>
-            </Grid>
-             <Grid
-             onMouseEnter={() => setHovered(true)}
-             onMouseLeave={() => setHovered(false)}
-             style={{
-               ...HomeView.boxOfPosts,
-               backgroundColor: hovered ? "#f5f5f5" : "#fff",
-             }}
-           >
-             asas
-             <Button>
-
-             </Button>
-           </Grid>
-
-
-
-
-
-            </>):(
-               <Grid
-               onMouseEnter={() => setHovered(true)}
-               onMouseLeave={() => setHovered(false)}
-               style={{
-                 ...HomeView.boxOfPosts,
-                 backgroundColor: hovered ? "#f5f5f5" : "#fff",
-               }}
-             >
-               sadsvdvfbfg
-               <Button>
- 
-               </Button>
-             </Grid>
-            )}
-         
+          )}
         </Grid>
         <Grid style={HomeView.butttonContainer}>
           <Button variant="outlined" style={HomeView.butttonOfPages}>
