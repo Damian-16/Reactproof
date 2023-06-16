@@ -1,9 +1,10 @@
-import { Button, FormControl, Grid, InputAdornment, MenuItem, TextField } from "@mui/material";
+import { Box, Button, FormControl, Grid, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import "./App.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getData } from "./backendServices/backend";
 import { frameworks } from "./utils/constants";
+import { FavoriteBorder } from "@mui/icons-material";
 
 export const HomeView = {
   home: {
@@ -83,21 +84,43 @@ export const HomeView = {
     backgroundColor: "#fff",
     transition: "background-color 0.3s ease",
   },
+  author:{
+    width: '6.688rem',
+    height: '0.813rem',
+    margin: '1rem 20.313rem 0.438rem 0.5rem',
+    fontFamily: 'Roboto',
+    fontSize: '0.688rem',
+    fontWeight: 'normal',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 'normal',
+    letterSpacing: 'normal',
+    color: '#767676',
+  }
 };
 
 function App() {
+  const [posts, setPosts] = useState([])
+  
   const [hovered, setHovered] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(0)
+  const [currentFrame, setCurrentFrame] = useState(null)
   const [tab, setTab] = useState(false);
   const changeTab=(e)=>setTab(e)
   const handleChangeCurrentFrame= (event) => {
     setCurrentFrame(event.target.value);
   };
+
+  useEffect(() => {
+    let newPost = JSON.parse(localStorage.getItem('frames'))
+    setPosts(newPost)
+    console.log("🚀 ~ file: App.jsx:90 ~ App ~ posts:", posts)
+  }, [currentFrame])
+  
   return (
     <>
       <Grid style={HomeView.home}>
         <Grid style={HomeView.rectangle}>
-          <span style={HomeView.title}>HELLOWORLD</span>
+          <span style={HomeView.title}>HACKER NEWS</span>
         </Grid>
         <Button variant="outlined" onClick={()=>changeTab(false)} style={HomeView.buttton}>
           <p style={HomeView.textButton}>All</p>
@@ -105,13 +128,14 @@ function App() {
         <Button variant="outlined" onClick={()=>changeTab(true)} style={HomeView.buttton}>
           <p style={HomeView.textButton}>MyFaves</p>
         </Button>
-        <Grid container flexWrap={"wrap"} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}xs={12}>
-        <TextField
+        <Grid mt={10} mb={5} item xs={12}
+>        <TextField
                 id="selector"
                 select
                 label="select your News"
                 value={currentFrame}
                 onChange={(e) => handleChangeCurrentFrame(e)}
+                sx={{minWidth:300}}
               >
         {frameworks.map((option) => (
                   <MenuItem onClick={()=>getData(option.action)} key={option.id} value={option.id}>
@@ -122,6 +146,9 @@ function App() {
                     </InputAdornment>
                   </MenuItem>
                 ))}</TextField>
+                </Grid>
+        <Grid container style={{display:"flex",flexDirection:"column",height:"70%"}} flexWrap={"wrap"} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}xs={12}>
+         
           {!tab?(<>
           
             <Grid
@@ -132,10 +159,12 @@ function App() {
                 backgroundColor: hovered ? "#f5f5f5" : "#fff",
               }}
             >
-              asas
-              <Button>
-
-              </Button>
+             <p style={HomeView.author}>por el author {`${author}`}</p>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                  <IconButton sx={{ display: 'flex', justifyContent: 'flex-end' }}variant="solid">
+                    <FavoriteBorder />
+                  </IconButton>
+                  </Box>    
             </Grid>
              <Grid
              onMouseEnter={() => setHovered(true)}
