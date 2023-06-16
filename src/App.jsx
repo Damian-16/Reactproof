@@ -1,8 +1,9 @@
-import { Button, Grid } from "@mui/material";
+import { Button, FormControl, Grid, InputAdornment, MenuItem, TextField } from "@mui/material";
 import "./App.css";
 import Buttons from "./components/buttons";
 import { useState } from "react";
 import { getData } from "./backendServices/backend";
+import { frameworks } from "./utils/constants";
 
 export const HomeView = {
   home: {
@@ -86,9 +87,13 @@ export const HomeView = {
 
 function App() {
   const [hovered, setHovered] = useState(false);
+  const [currentFrame, setCurrentFrame] = useState(0)
   getData("a")
   const [tab, setTab] = useState(false);
   const changeTab=(e)=>setTab(e)
+  const handleChangeCurrentFrame= (event) => {
+    setCurrentFrame(event.target.value);
+  };
   return (
     <>
       <Grid style={HomeView.home}>
@@ -102,7 +107,24 @@ function App() {
           <p style={HomeView.textButton}>MyFaves</p>
         </Button>
         <Grid container flexWrap={"wrap"} rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}xs={12}>
+        <TextField
+                id="selector"
+                select
+                label="select your News"
+                value={currentFrame}
+                onChange={(e) => handleChangeCurrentFrame(e)}
+              >
+        {frameworks.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    <InputAdornment position="start" style={{ margin: 10 }}>
+                      {" "}
+                      <img src={option.icon} width={24 }height={24}></img>
+                      {option.text}{" "}
+                    </InputAdornment>
+                  </MenuItem>
+                ))}</TextField>
           {!tab?(<>
+          
             <Grid
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
