@@ -1,6 +1,6 @@
 import { Button, FormControl, Grid, InputAdornment, MenuItem, TextField } from "@mui/material";
 import "./App.css";
-import Buttons from "./components/buttons";
+
 import { useState } from "react";
 import { getData } from "./backendServices/backend";
 import { frameworks } from "./utils/constants";
@@ -88,7 +88,6 @@ export const HomeView = {
 function App() {
   const [hovered, setHovered] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0)
-  getData("a")
   const [tab, setTab] = useState(false);
   const changeTab=(e)=>setTab(e)
   const handleChangeCurrentFrame= (event) => {
@@ -115,7 +114,7 @@ function App() {
                 onChange={(e) => handleChangeCurrentFrame(e)}
               >
         {frameworks.map((option) => (
-                  <MenuItem key={option.id} value={option.id}>
+                  <MenuItem onClick={()=>getData(option.action)} key={option.id} value={option.id}>
                     <InputAdornment position="start" style={{ margin: 10 }}>
                       {" "}
                       <img src={option.icon} width={24 }height={24}></img>
