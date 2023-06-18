@@ -16,116 +16,14 @@ import { useEffect, useState } from "react";
 import { getData } from "./backendServices/backend";
 import { frameworks } from "./utils/constants";
 import { FavoriteBorder } from "@mui/icons-material";
+import { HomeView } from "./assets/styles/homeViewStyles";
+import Post from "./components/post";
 
-export const HomeView = {
-  home: {
-    width: "90rem",
-    height: "64rem",
-    padding: "0 0 6.125rem",
-    backgroundColor: "#fcfcfc",
-  },
-  rectangle: {
-    width: "90rem",
-    height: " 7.125rem",
-    margin: "0 0 4.375rem",
-    padding: "2.75rem 67.625rem 2.625rem 9.375rem",
-    boxShadow: "0 1px 4px 0 var(--navy-12)",
-    backgroundImage: "linear-gradient(to bottom, #ececec -32%, #fff 124%)",
-  },
-  title: {
-    width: "13rem",
-    height: "1.75rem",
-    objectFit: "contain",
-    fontFamily: "Baskerville",
-    fontSize: "1.75rem",
-    fontWeight: "normal",
-    fontStretch: "normal",
-    fontStyle: "normal",
-    lineHeight: "1",
-    letterSpacing: "normal",
-    color: "#3b3b3b",
-  },
-  button: {
-    width: "6.125rem",
-    height: "1.938rem",
-    padding: "0.188rem 2.438rem 0 2.5rem",
-    borderRadius: "2px",
-    border: "solid 1px var(--azure)",
-  },
-  textButton: {
-    width: "4.063rem",
-    height: "1.75rem",
-    fontFamily: "Roboto",
-    fontSize: "1rem",
-    fontWeight: "500",
-    fontStretch: "normal",
-    fontStyle: "normal",
-    lineHeight: "1.75",
-    letterSpacing: "normal",
-    textAlign: "center",
-    color: "#606060",
-  },
-  butttonContainer: {
-    display: "flex",
-    flexWrap: "wrap",
 
-    margin: "0 0.5rem",
-    padding: "0.375rem 0.75rem 0.25rem",
-    borderRadius: "6px",
-    border: "solid 1px #d9d9d9",
-    backgroundColor: "#fff",
-  },
-  buttonOfPages: {
-    width: "2rem",
-    height: "2rem",
-    margin: "0 0.5rem",
-    padding: "0.375rem 0.75rem 0.25rem",
-    borderRadius: "6px",
-    border: "solid 1px #d9d9d9",
-    backgroundColor: "#fff",
-  },
-  boxOfPosts: {
-    width: "34.375rem",
-    height: "5.625rem",
-    margin: "1.125rem 2.5rem 1.875rem 9.375rem",
-    padding: "0 0 0 1.625rem",
-    opacity: "0.8",
-    borderRadius: "6px",
-    border: "solid 1px #979797",
-    backgroundColor: "#fff",
-    transition: "background-color 0.3s ease",
-  },
-  author: {
-    width: "6.688rem",
-    height: "0.813rem",
-    margin: "1rem 20.313rem 0.438rem 0.5rem",
-    fontFamily: "Roboto",
-    fontSize: "0.688rem",
-    fontWeight: "normal",
-    fontStretch: "normal",
-    fontStyle: "normal",
-    lineHeight: "normal",
-    letterSpacing: "normal",
-    color: "#767676",
-  },
-  story_title: {
-    width: "27.5rem",
-    height: "1.25rem",
-    margin: "0.375rem 0 0",
-    fontFamily: "Roboto",
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    fontStretch: "normal",
-    fontStyle: "normal",
-    lineHeight: 1.43,
-    letterSpacing: "0.25px",
-    color: "var(--brownish-grey)",
-    marginTop: 3,
-  },
-};
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [fav, setFav] = useState([])
   const [hovered, setHovered] = useState();
   const [currentFrame, setCurrentFrame] = useState(null);
   const [tab, setTab] = useState(false);
@@ -133,6 +31,11 @@ function App() {
   const handleChangeCurrentFrame = (event) => {
     setCurrentFrame(event.target.value);
   };
+  const addFav = (params) => {
+    const validation = fav.filter((item)=>params.id === item.id)
+    !validation? setFav([...fav,params]):null
+   localStorage.setItem("favs", JSON.stringify(fav))
+  }
 
   let returnPosts = () => {
     return posts.map((item) => (
@@ -155,6 +58,7 @@ function App() {
           <IconButton
             sx={{ display: "flex", justifyContent: "flex-end" }}
             variant="solid"
+            onClick={()=>addFav(item)}
           >
             <FavoriteBorder />
           </IconButton>
@@ -172,7 +76,8 @@ function App() {
   useEffect(() => {
     let newPost = JSON.parse(localStorage.getItem("frames"));
     setPosts(newPost);
-  }, [currentFrame]);
+  }, [fav]);
+ 
   return (
     <>
       <Grid style={HomeView.home}>
@@ -227,7 +132,9 @@ function App() {
           xs={12}
         >
           {!tab ? (
-            <>{returnPosts()}</>
+           posts.map((item, index) => (
+            <Post key={index} item={item} />
+          ))
           ) : (
             <Grid
               onMouseEnter={() => setHovered(true)}

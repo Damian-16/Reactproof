@@ -21,6 +21,7 @@ export const getData = (params) => {
     })
     .catch((error) => {
       console.error("Error al hacer la solicitud:", error);
+      alert("algo salio mal intente nuevamente en un rato xD")
       throw error;
     });
 };
