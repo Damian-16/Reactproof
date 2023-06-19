@@ -31,53 +31,20 @@ function App() {
   const handleChangeCurrentFrame = (event) => {
     setCurrentFrame(event.target.value);
   };
-  const addFav = (params) => {
-    const validation = fav.filter((item)=>params.id === item.id)
-    !validation? setFav([...fav,params]):null
-   localStorage.setItem("favs", JSON.stringify(fav))
-  }
 
-  let returnPosts = () => {
-    return posts.map((item) => (
-      <Grid
-        key={item.id}
-        onMouseEnter={() => setHovered(item.id)}
-        onMouseLeave={() => setHovered(0)}
-        style={{
-          ...HomeView.boxOfPosts,
-          backgroundColor: item.id === hovered ? "#f5f5f5" : "#fff",
-        }}
-      >
-        <Link href={item.story_url} textColor="none" underline="none">
-          <p style={HomeView.author}>por el author {`${item.author}`}</p>
-          <p style={HomeView.story_title}>{`${item.story_title}`}</p>
-        </Link>
-        <Box
-          sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-end" }}
-        >
-          <IconButton
-            sx={{ display: "flex", justifyContent: "flex-end" }}
-            variant="solid"
-            onClick={()=>addFav(item)}
-          >
-            <FavoriteBorder />
-          </IconButton>
-        </Box>
-      </Grid>
-    ));
-  };
+ 
 
   useEffect(() => {
     let newPost = JSON.parse(localStorage.getItem("frames"));
     setPosts(newPost);
-    returnPosts();
+    
     console.log("🚀 ~ file: App.jsx:90 ~ App ~ posts:", posts);
   }, [currentFrame]);
   useEffect(() => {
-    let newPost = JSON.parse(localStorage.getItem("frames"));
-    setPosts(newPost);
+   localStorage.setItem("favs", JSON.stringify(fav))
+    
   }, [fav]);
- 
+
   return (
     <>
       <Grid style={HomeView.home}>
@@ -133,20 +100,12 @@ function App() {
         >
           {!tab ? (
            posts.map((item, index) => (
-            <Post key={index} item={item} />
+            <Post key={index} item={item} fav={fav} setFav={setFav}/>
           ))
           ) : (
-            <Grid
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-              style={{
-                ...HomeView.boxOfPosts,
-                backgroundColor: hovered ? "#f5f5f5" : "#fff",
-              }}
-            >
-              sadsvdvfbfg
-              <Button></Button>
-            </Grid>
+            fav.map((item, index) => (
+              <Post key={index} item={item} fav={fav} setFav={setFav}  />
+            ))
           )}
         </Grid>
         <Grid style={HomeView.butttonContainer}>

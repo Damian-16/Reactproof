@@ -92,6 +92,7 @@ export const HomeView = {
     story_title: {
       width: "27.5rem",
       height: "1.25rem",
+      maxWidth: "80%",
       margin: "0.375rem 0 0",
       fontFamily: "Roboto",
       fontSize: "0.875rem",
