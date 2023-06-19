@@ -18,17 +18,7 @@ const Post = (item) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-  // const handleAddFavButton = (params) => {
-  //   debugger;
-  //   console.log("🚀 ~ file: post.jsx:25 ~ handleAddFavButton ~ item.setFav:", item.setFav)
-  //   const validation = item.fav ? item.fav.filter((item)=>params.objectID === item.objectID):[]
-  //   !item.fav?item.setFav([params])
-  
-  //   :!validation? item.setFav([...item.fav,params])
-  //   :item.setFav(item.fav)
-    
-  
-  // }
+
   const handleAddFavButton = (params) => {
    
     if (!item.fav) {
