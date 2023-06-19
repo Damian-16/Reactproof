@@ -1,30 +1,23 @@
 import {
-  Box,
   Button,
-  FormControl,
   Grid,
-  IconButton,
   InputAdornment,
-  Link,
   MenuItem,
   TextField,
-  Typography,
 } from "@mui/material";
 import "./App.css";
 
 import { useEffect, useState } from "react";
 import { getData } from "./backendServices/backend";
 import { frameworks } from "./utils/constants";
-import { FavoriteBorder } from "@mui/icons-material";
+
 import { HomeView } from "./assets/styles/homeViewStyles";
 import Post from "./components/post";
 
-
-
 function App() {
   const [posts, setPosts] = useState([]);
-  const [fav, setFav] = useState([])
-  const [hovered, setHovered] = useState();
+  const [fav, setFav] = useState([]);
+
   const [currentFrame, setCurrentFrame] = useState(null);
   const [tab, setTab] = useState(false);
   const changeTab = (e) => setTab(e);
@@ -32,17 +25,12 @@ function App() {
     setCurrentFrame(event.target.value);
   };
 
- 
-
   useEffect(() => {
     let newPost = JSON.parse(localStorage.getItem("frames"));
     setPosts(newPost);
-    
-    console.log("🚀 ~ file: App.jsx:90 ~ App ~ posts:", posts);
   }, [currentFrame]);
   useEffect(() => {
-   localStorage.setItem("favs", JSON.stringify(fav))
-    
+    localStorage.setItem("favs", JSON.stringify(fav));
   }, [fav]);
 
   return (
@@ -92,21 +80,19 @@ function App() {
         </Grid>
         <Grid
           container
-          style={{ display: "flex", flexDirection: "column", height: "70%" }}
+          style={HomeView.postsContainer}
           flexWrap={"wrap"}
           rowSpacing={1}
           columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           xs={12}
         >
-          {!tab ? (
-           posts.map((item, index) => (
-            <Post key={index} item={item} fav={fav} setFav={setFav}/>
-          ))
-          ) : (
-            fav.map((item, index) => (
-              <Post key={index} item={item} fav={fav} setFav={setFav}  />
-            ))
-          )}
+          {!tab
+            ?posts && posts.map((item, index) => (
+                <Post key={index} item={item} fav={fav} setFav={setFav} />
+              ))
+            : fav && fav.map((item, index) => (
+                <Post key={index} item={item} fav={fav} setFav={setFav} />
+              ))}
         </Grid>
         <Grid style={HomeView.butttonContainer}>
           <Button variant="outlined" style={HomeView.butttonOfPages}>

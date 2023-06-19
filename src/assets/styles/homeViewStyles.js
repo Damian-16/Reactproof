@@ -65,6 +65,19 @@ export const HomeView = {
       border: "solid 1px #d9d9d9",
       backgroundColor: "#fff",
     },
+    postsContainer:{
+      display: "flex",
+      flexDirection: "column",
+      height: "70%",
+      width: "100%",
+      alignSelf: "center",
+      overflow: "scroll",
+      scrollbarWidth: "thin",
+      scrollbarColor: "#888 #f1f1f1",
+      "&:hover": {
+        scrollbarColor: "#555 #f1f1f1",
+      },
+    },
     boxOfPosts: {
       width: "34.375rem",
       height: "5.625rem",
